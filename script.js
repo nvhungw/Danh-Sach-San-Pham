@@ -59,6 +59,16 @@ class App {
     });
   }
 
+  hideAddButton(thisOfApp) {
+    //////////////////////
+    createProductBtn.style.display = 'none';
+  }
+
+  showAddButton(thisOfApp) {
+    //////////////////////
+    createProductBtn.style.display = 'block';
+  }
+
   renderProducts() {
     let productList = document.querySelector('#productList');
     let productHtml = '';
@@ -103,6 +113,7 @@ class App {
       productItem.addEventListener('click', function () {
         let id = productItem.getAttribute('data-id');
         thisOfApp.editProduct(id);
+        thisOfApp.hideAddButton();
       });
     });
   }
@@ -111,7 +122,6 @@ class App {
     // lay input
     let productNameEl = document.querySelector('#productName');
     let productPriceEl = document.querySelector('#productPrice');
-    // console.log(Number(this.products[this.products.length - 1].id) + 1)
     let idCreate = +this.products[this.products.length - 1].id + 1;
 
     let productNew = new Product(
@@ -120,10 +130,16 @@ class App {
       productPriceEl.value,
       imageLink
     );
-    this.addProduct(productNew);
-    this.renderProducts();
-    productNameEl.value = '';
-    productPriceEl.value = '';
+    if (productNameEl.value != '' && productPriceEl.value != '') {
+      this.addProduct(productNew);
+      this.renderProducts();
+      productNameEl.value = '';
+      productPriceEl.value = '';
+      error.innerHTML = '';
+    } else {
+      let error = document.querySelector('#error');
+      error.innerHTML = 'Name and price cannot be blank ';
+    }
   }
 
   handleUpdate() {
@@ -138,12 +154,9 @@ class App {
 
         this.products[productEditIndex] = productUpdateNew;
         this.renderProducts();
-        //reset input and update id
         productNameEl.value = '';
         productPriceEl.value = '';
         this.updateProduct = '';
-        // a[1] =0
-        // a[1] = 20
       }
     } else {
       console.log('not');
@@ -154,24 +167,21 @@ class App {
 let imageLink =
   'https://img.tgdd.vn/imgt/f_webp,fit_outside,quality_100/https://cdn.tgdd.vn/Products/Images/7077/282959/dong-ho-befit-b4-thumbnn-600x600.jpg';
 let product = new Product('1', 'IPhone', 1000, imageLink);
-let product2 = new Product(3, 'IPhone2', 1000, imageLink);
+let product2 = new Product('2', 'IPhone2', 1000, imageLink);
 let app = new App();
-let createProductBtn = document.querySelector('#createProduct');
 
+let createProductBtn = document.querySelector('#createProduct');
 createProductBtn.addEventListener('click', function () {
-  console.log(this);
   app.createProduct();
 });
 
-
 let updateProductBtn = document.querySelector('#updateProduct');
-
 updateProductBtn.addEventListener('click', function () {
   app.handleUpdate();
+  app.showAddButton();
 });
 
 app.addProduct(product);
 app.addProduct(product2);
-
 app.renderProducts();
 console.log(app);
