@@ -163,6 +163,7 @@ createProductBtn.addEventListener('click', function () {
   app.createProduct();
 });
 
+
 let updateProductBtn = document.querySelector('#updateProduct');
 
 updateProductBtn.addEventListener('click', function () {
